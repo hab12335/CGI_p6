@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 vPosition;
+        attribute vec4 vNormal;
+        uniform mat4 mModel;
+        uniform mat4 mProjection;
+        uniform mat4 mView;
+        varying vec4 fNormal;
+        void main(){
+            gl_Position = mProjection * mView * mModel * vPosition;
+            fNormal = vNormal;
+        }
+    </script>
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        varying vec4 fNormal;
+
+        void main() {
+            gl_FragColor = abs(fNormal);
+        }
+    </script>
+    <script type="text/javascript" src="./Common/webgl-utils.js"></script>
+    <script type="text/javascript" src="./Common/initShaders.js"></script>
+    <script type="text/javascript" src="./Common/MV.js"></script>
+    <script type="text/javascript" src="3d.js"></script>
+    <script type="text/javascript" src="./Common/cube.js"></script>
+    <script type="text/javascript" src="./Common/sphere.js"></script>
+</head>
+<body>
+<title>Triangle</title>
+<canvas id="gl-canvas" width="512" height="512">
+    Oops... your browser doesn't support the HTML5 canvas element"
+</canvas>
+<div id="controls">
+    <div id="translation">
+            xpos <input id="xpos" type="range"
+                        min="-1" max="1" step="0.1" value="0"/>
+            ypos <input id="ypos" type="range"
+                        min="-1" max="1" step="0.1" value="0"/>
+            zpos <input id="zpos" type="range"
+                        min="-1" max="1" step="0.1" value="0"/>
+    </div>
+    <br>
+    <div id="rotations">
+            rotateX <input id="rotatex" type="range"
+                           min="-180" max="180" step="10" value="0"/>
+            rotateY <input id="rotatey" type="range"
+                           min="-180" max="180" step="10" value="0"/>
+            rotateZ <input id="rotatez" type="range"
+                           min="-180" max="180" step="10" value="0"/>
+    </div>
+    <br>
+        <div id="scale">
+                xfactor <input id="xfactor" type="range"
+                               min="0.05" max="2" step="0.05" value="1"/>
+                yfactor <input id="yfactor" type="range"
+                               min="0.05" max="2" step="0.05" value="1"/>
+                zfactor <input id="zfactor" type="range"
+                               min="0.05" max="2" step="0.05" value="1"/>
+        </div>
+    <br>
+    <div id="buttons">
+            <button id="cube">Generate cube</button>
+            <button id="sphere">Generate sphere</button>
+            <button id="reset">Reset Current</button>
+            <button id="restart">Clear All</button>
+    </div>
+</div>
+
+</body>
+</html>
