@@ -12,6 +12,8 @@ var mProjectionLoc;
 
 function processTransformations() {
     var transformation = mat4();
+    console.log($("#xfactor").val());
+
     transformation  = mult(scalem($("#xfactor").val(), $("#yfactor").val(), $("#zfactor").val()), transformation);
     transformation = mult(rotateX($("#rotatex").val()), transformation);
     transformation = mult(rotateY($("#rotatey").val()), transformation);
@@ -20,21 +22,21 @@ function processTransformations() {
     instances[instances.length -1 ].mModel = transformation;
 }
 function registerEvents() {
-    $("div#controls input").on("input", () => {
+    $("div#controls > div > input").on("input", () => {
         processTransformations();
     });
 
     $(window).resize(() => {
         var $canvas = $("#gl-canvas");
         var $controls = $("#controls");
-        $canvas.width(Math.min(window.innerWidth, window.innerHeight) - $controls.height());
+        $canvas.width(Math.min(window.innerWidth, window.innerHeight) - $controls[0].offsetHeight);
         $canvas.height($canvas.width());
-        gl.viewport(0, 0, $canvas.width(), $canvas.height());
+        gl.viewport(0, 0, $canvas[0].width, $canvas[0].height);
     });
 
     function resetControls() {
-        $("#translation input, #rotations input").val(0);
-        $("#scale input").val(1);
+        $("#translation > input, #rotations > input").val(0);
+        $("#scale > input").val(1);
     }
 
     $("#cube").click(() => {
@@ -72,17 +74,17 @@ function registerEvents() {
     });
 }
 function setupUniforms() {
-    var canvas = document.getElementById("gl-canvas");
-    var controls = document.getElementById("controls")
-    canvas.width  = Math.min(window.innerWidth, window.innerHeight) - controls.offsetHeight;
-    canvas.height = canvas.width;
-    gl = WebGLUtils.setupWebGL(canvas);
+    var $canvas = $("#gl-canvas");
+    var $controls = $("#controls");
+    $canvas.width(Math.min(window.innerWidth, window.innerHeight) - $controls[0].offsetHeight);
+    $canvas.height($canvas.width);
+    gl = WebGLUtils.setupWebGL($canvas[0]);
     if(!gl) { alert("WebGL isn't available"); }
     program = initShaders(gl, "vertex-shader", "fragment-shader");
     mModelLoc      = gl.getUniformLocation(program, "mModel");
     mViewLoc       = gl.getUniformLocation(program, "mView");
     mProjectionLoc = gl.getUniformLocation(program, "mProjection");
-    gl.viewport(0,0,canvas.width, canvas.height);
+    gl.viewport(0,0,$canvas[0].width, $canvas[0].height);
     gl.clearColor(0, 0, 0, 1.0);
 }
 function render() {
