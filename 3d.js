@@ -12,8 +12,6 @@ var mProjectionLoc;
 
 function processTransformations() {
     var transformation = mat4();
-    console.log($("#xfactor").val());
-
     transformation  = mult(scalem($("#xfactor").val(), $("#yfactor").val(), $("#zfactor").val()), transformation);
     transformation = mult(rotateX($("#rotatex").val()), transformation);
     transformation = mult(rotateY($("#rotatey").val()), transformation);
@@ -22,7 +20,7 @@ function processTransformations() {
     instances[instances.length -1 ].mModel = transformation;
 }
 function registerEvents() {
-    $("div#controls > div > input").on("input", () => {
+    $("div > input", $("div#controls")).on("input", () => {
         processTransformations();
     });
 
@@ -35,8 +33,8 @@ function registerEvents() {
     });
 
     function resetControls() {
-        $("#translation > input, #rotations > input").val(0);
-        $("#scale > input").val(1);
+        $("input", $("#translation, #rotations")).val(0);
+        $("input", $("#scale")).val(1);
     }
 
     $("#cube").click(() => {
